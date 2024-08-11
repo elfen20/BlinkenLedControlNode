@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    volumes:
+      - ./app:/app
+    ports:
+      - "8888:8888"
+    user: node
+    command: >
+      sh -c "yarn install &&
+             nodemon --watch /app /app/server.js"

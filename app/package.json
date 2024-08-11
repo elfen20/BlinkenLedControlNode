@@ -1,0 +1,13 @@
+{
+  "name": "BlinkenLedControlNode",
+  "version": "1.0.0",
+  "description": "Control BlinkenLed with node server",
+  "main": "server.js",
+  "dependencies": {
+    "fastify": "latest",
+    "@fastify/static": "latest",
+    "path": "latest"
+  },
+  "author": "elfen20",
+  "license": "GPL"
+}
