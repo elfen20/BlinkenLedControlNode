@@ -1,0 +1,23 @@
+<script>
+    function scan4Led() {
+        fetch('/scan').then(response => { })
+    }
+</script>
+
+<div class="pure-u-3-5">
+    <p class="c-title">BlinkenLed's:</p>
+</div>
+<div class="pure-u-2-5">
+    <button class="pure-button" onclick="scan4Led()">Scan</button>
+</div>
+{{#if blItems}}
+{{#each blItems}}
+<div class="pure-u-1-5">
+    <p>{{this.ip}}</p>
+</div>
+{{/each}}
+{{else}}
+<div class="pure-u-1">
+    <p>No Items found...</p>
+</div>
+{{/if}}
