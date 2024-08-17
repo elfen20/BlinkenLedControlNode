@@ -3,8 +3,11 @@ services:
     build: .
     volumes:
       - ./app:/app
-    ports:
-      - "8888:8888"
+# use network_mode OR ports
+    network_mode: "host"   
+#    ports:
+#      - "8888:8888"
+#      - "2693:2693/udp"
     user: node
     command: >
       sh -c "yarn install &&
