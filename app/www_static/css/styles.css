@@ -1,0 +1,34 @@
+/* Styles.css */
+
+body {
+    background: #2a2a2a;
+}
+
+/* Menu styles */
+
+.home-menu {
+    box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
+    background: #2d3e50;
+}
+
+.home-menu .pure-menu-heading {
+    color: white;
+    font-weight: 400;
+    font-size: 120%;
+}
+
+/* content */
+
+.content { 
+    background: #2a2a2a;
+    color: aliceblue;
+    margin: 1em;
+}
+
+.c-title {
+    font-size: large;
+}
+
+.pure-button {
+    background: lightgrey;
+}
