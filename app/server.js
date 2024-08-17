@@ -1,23 +1,61 @@
 // server.js
 /**
  * @type {import('fastify').FastifyInstance}
+ * @type {import('config')}
  */
+const path = require('path');
+const config = require('config');
+const { logger } = require('./lib/logger');
+const udpserver = require('./lib/udpserver');
+const { blinkenLedList } = require('./lib/blinkenledlist');
 
-const fastify = require('fastify')({ logger: { level: 'warn' } })
-const path = require('path')
+logger.info('App started!');
 
-// register root path
+const fastify = require('fastify')({logger: {level: 'warn', }})
+
+// register static rendering
 fastify.register(require('@fastify/static'), {
-  root: path.join(__dirname, 'www'),
+  root: path.join(__dirname, 'www_static'),
+})
+
+// register view rendering
+fastify.register(require('@fastify/view'), {
+  engine: {
+    handlebars: require('handlebars'),
+  },
+  root: path.join(__dirname, 'www_view'),
+  layout: path.join('layout', 'layout.hbs'),
+})
+
+fastify.get('/log', async (request, reply) => {
+  return reply.viewAsync('log.hbs', { logItems:  []});
+})
+
+fastify.get('/scan', async (request, reply) => {
+  udpserver.server.sendCommand('224.0.0.237', 'HELO');
+  return reply.send({ result: 'Ok'});
+})
+
+fastify.get('/', async (request, reply) => {
+  const blItems = blinkenLedList.getItemsJson();
+  logger.info(blItems);
+  return reply.viewAsync('index.hbs', { blItems: blinkenLedList.getItemsJson() });
 })
 
 // run the server on 0.0.0.0:8888
+const serverCfg = config.has('server') ? config.server : { host: '0.0.0.0', port: 8888};
 const startServer = async () => {
   try {
-    await fastify.listen({ port: 8888, host: '0.0.0.0' })
+    await fastify.listen(serverCfg)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
   }
 }
+
+// sending Helo
+logger.info('Sending Mulicast Helo..');
+udpserver.server.sendCommand('224.0.0.237', 'HELO');
+
+logger.info('Starting Webserver...');
 startServer()
