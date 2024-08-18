@@ -21,7 +21,7 @@
         {{#each blItems}}
         <tr>
             <td>{{this.index}}</td>
-            <td>{{this.ip}}</td>
+            <td><a href="/bled/{{this.key}}">{{this.ip}}</a></td>
             <td>{{this.lastSeen}}</td>            
         </tr>
         {{/each}}

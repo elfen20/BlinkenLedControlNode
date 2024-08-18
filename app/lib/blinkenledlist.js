@@ -1,7 +1,7 @@
 // blinkenLedList.js
 
 const parentLogger = require('./logger');
-const logger = parentLogger.logger.child({ module: 'bLedList' });
+const log = parentLogger.logger.child({ module: 'bLedList' });
 
 function dot2num(dot) {
     var d = dot.split('.');
@@ -32,16 +32,15 @@ class BlinkenLedList {
 
     getItemsJson() {
         const result = []
-        const sort = this.bList.values();
-        
-        sort.forEach((element, index) => {
-            result.push({
-                index: index + 1,
-                ip: element.ip,
-                lastSeen: `${((Date.now() - element.lastSeen) / 1000)} s`
+        let index = 1
+        this.bList.forEach((value, key) => {
+            result.push({                
+                index: index++,
+                key: key,
+                ip: value.ip,
+                lastSeen: `${((Date.now() - value.lastSeen) / 1000)} s`
             })
         });
-        logger.info(result);
         return result;
     }
 }
