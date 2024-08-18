@@ -36,9 +36,14 @@ fastify.get('/scan', async (request, reply) => {
   return reply.send({ result: 'Ok'});
 })
 
+fastify.get('/bled/:bledId', async (request, reply) => {
+  const bledInfo = { id: request.params.bledId}
+  return reply.viewAsync('bled.hbs', { bledInfo: bledInfo });
+})
+
 fastify.get('/', async (request, reply) => {
   const blItems = blinkenLedList.getItemsJson();
-  logger.info(blItems);
+  logger.info(JSON.stringify(blItems));
   return reply.viewAsync('index.hbs', { blItems: blinkenLedList.getItemsJson() });
 })
 
