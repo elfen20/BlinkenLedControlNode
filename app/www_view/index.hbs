@@ -11,11 +11,22 @@
     <button class="pure-button" onclick="scan4Led()">Scan</button>
 </div>
 {{#if blItems}}
-{{#each blItems}}
-<div class="pure-u-1-5">
-    <p>{{this.ip}}</p>
-</div>
-{{/each}}
+<table class="pure-table">
+    <thead>
+        <th>#</th>
+        <th>BLed</th>
+        <th>last seen</th>
+    </thead>
+    <tbody>
+        {{#each blItems}}
+        <tr>
+            <td>{{this.index}}</td>
+            <td>{{this.ip}}</td>
+            <td>{{this.lastSeen}}</td>            
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
 {{else}}
 <div class="pure-u-1">
     <p>No Items found...</p>
