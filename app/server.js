@@ -9,6 +9,7 @@ const { logger } = require('./lib/logger');
 const udpserver = require('./lib/udpserver');
 const { blinkenLedList } = require('./lib/blinkenledlist');
 
+logger.info('- - - - - - - - - - - - - - - - - - - - - - - -');
 logger.info('App started!');
 
 const fastify = require('fastify')({logger: {level: 'warn', }})
@@ -37,8 +38,16 @@ fastify.get('/scan', async (request, reply) => {
 })
 
 fastify.get('/bled/:bledId', async (request, reply) => {
-  const bledInfo = { id: request.params.bledId}
-  return reply.viewAsync('bled.hbs', { bledInfo: bledInfo });
+  const bledIp = blinkenLedList.getItemIp(request.params.bledId);
+  logger.info(`Ip: ${bledIp}`);
+  const response = await fetch(`http://${bledIp}/info`).catch((error) => logger.error(error));
+  const info = await response.text();
+  return reply.viewAsync('bled.hbs', { bledIp: bledIp, info: JSON.stringify(info, null, '  ') });
+})
+
+fastify.get('/update/:bledId', async (request, reply) => {
+  blinkenLedList.updateBLed(request.params.bledId);
+  return reply.send({ result: 'Ok'});
 })
 
 fastify.get('/', async (request, reply) => {
@@ -59,7 +68,7 @@ const startServer = async () => {
 }
 
 // sending Helo
-logger.info('Sending Mulicast Helo..');
+logger.info('Sending Multicast Helo...');
 udpserver.server.sendCommand('224.0.0.237', 'HELO');
 
 logger.info('Starting Webserver...');
