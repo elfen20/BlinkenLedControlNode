@@ -2,6 +2,9 @@
     function scan4Led() {
         fetch('/scan').then(response => { })
     }
+    function updateLed(lId) {
+        fetch('/update/' + lId.toString()).then(response => { })
+    }
 </script>
 
 <div class="pure-u-3-5">
@@ -16,6 +19,7 @@
         <th>#</th>
         <th>BLed</th>
         <th>last seen</th>
+        <th>options</th>
     </thead>
     <tbody>
         {{#each blItems}}
@@ -23,6 +27,7 @@
             <td>{{this.index}}</td>
             <td><a href="/bled/{{this.key}}">{{this.ip}}</a></td>
             <td>{{this.lastSeen}}</td>            
+            <td><i class='bx bx-cloud-upload' style="font-size: 1.5em;" onclick="updateLed({{this.key}})"></i></td>            
         </tr>
         {{/each}}
     </tbody>
