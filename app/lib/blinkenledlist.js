@@ -2,6 +2,8 @@
 
 const parentLogger = require('./logger');
 const log = parentLogger.logger.child({ module: 'bLedList' });
+const config = require('config');
+const uSConfig = config.has('updateserver') ? config.updateserver : { host: '10.0.0.1', port: 8080 };
 
 function dot2num(dot) {
     var d = dot.split('.');
@@ -22,9 +24,9 @@ class BlinkenLedList {
         this.bList = new Map()
     }
 
-    update(bLedIP) {        
+    update(bLedIP) {
         const item = {
-            ip: bLedIP, 
+            ip: bLedIP,
             lastSeen: Date.now()
         }
         this.bList.set(dot2num(item.ip), item);
@@ -34,7 +36,7 @@ class BlinkenLedList {
         const result = []
         let index = 1
         this.bList.forEach((value, key) => {
-            result.push({                
+            result.push({
                 index: index++,
                 key: key,
                 ip: value.ip,
@@ -42,6 +44,25 @@ class BlinkenLedList {
             })
         });
         return result;
+    }
+
+    getItemIp(bLedId) {
+        const item = this.bList.get(parseInt(bLedId));
+        log.debug(`Key: ${bLedId} Item: ${item}`);
+        if (item)
+            return item.ip;
+        else
+            return undefined;
+    }
+
+    updateBLed(bLedId) {
+        const item = this.bList.get(parseInt(bLedId));
+        log.debug(`Key: ${bLedId} Item: ${item}`);
+        if (item) {
+            const updateUrl = `http://${uSConfig.host}:${uSConfig.port}`;
+            fetch(`http://${item.ip}/cmd/UPDT/${uSConfig.host}:${uSConfig.port}`)
+            .catch((error) => {log.error(error)});
+        }
     }
 }
 
