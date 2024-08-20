@@ -8,6 +8,7 @@
     "@fastify/static": "latest",
     "@fastify/view": "latest",
     "handlebars": "latest",
+    "boxicons": "latest",
     "path": "latest",
     "config": "latest"
   },
