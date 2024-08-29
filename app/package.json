@@ -2,7 +2,8 @@
   "name": "@elfen20/blinken-led-control",
   "version": "1.0.0",
   "description": "Control BlinkenLed with node server",
-  "main": "server.js",
+  "main": "server.mjs",
+  "type" : "module",
   "dependencies": {
     "fastify": "latest",
     "@fastify/static": "latest",
@@ -10,7 +11,8 @@
     "handlebars": "latest",
     "boxicons": "latest",
     "path": "latest",
-    "config": "latest"
+    "config": "latest",
+    "pino-loki": "latest"
   },
   "author": "elfen20",
   "license": "GPL-3.0"

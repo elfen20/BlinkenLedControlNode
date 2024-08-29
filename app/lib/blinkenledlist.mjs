@@ -1,8 +1,8 @@
 // blinkenLedList.js
 
-const parentLogger = require('./logger');
-const log = parentLogger.logger.child({ module: 'bLedList' });
-const config = require('config');
+import parentLogger from './logger.mjs';
+const log = parentLogger.child({ module: 'bLedList' });
+import config from 'config';
 const uSConfig = config.has('updateserver') ? config.updateserver : { host: '10.0.0.1', port: 8080 };
 
 function dot2num(dot) {
@@ -66,4 +66,6 @@ class BlinkenLedList {
     }
 }
 
-module.exports.blinkenLedList = new BlinkenLedList();
+const blinkenLedList = new BlinkenLedList();
+
+export default blinkenLedList;
