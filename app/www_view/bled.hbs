@@ -1,2 +1,77 @@
-<div class="pure-u-1"><p>{{bledIp}}</p></div>
-<div class="pure-u-1"><pre>{{info}}</pre></div>
+<div class="pure-u-3-5">
+    {{bledIp}}
+</div>
+<div class="pure-u-1-5">
+    <button onclick="startUpdate()">OTA Update</button>
+</div>
+<div class="pure-u-1"><p></p></div>
+<div class="pure-u-1">
+    {{#each bledDefs.modes}}
+    <button onclick="sendCommand('SMOD',{{this}})">{{@key}}</button>
+    {{/each}}
+</div>
+<div class="pure-u-1"><p></p></div>
+<div class="pure-u-1-5">
+    <button onclick="setValue('CLED', 'iLCount')">LED Count</button>
+</div>
+<div class="pure-u-1-5">
+    <input type="text" id="iLCount" value="{{bledConfig.LCount}}">
+</div>
+<div class="pure-u-1"><p></p></div>
+<div class="pure-u-1-5">
+    <button onclick="setValue('SBRT', 'iLBright')">LED Brightness</button>
+</div>
+<div class="pure-u-1-5">
+    <input type="text" id="iLBright" value="{{bledConfig.LBright}}">
+</div>
+<div class="pure-u-1"><p></p></div>
+<div class="pure-u-1">
+    {{#each bledDefs.animations}}
+    <button onclick="sendCommand('SANI',{{this}})">{{@key}}</button>
+    {{/each}}
+</div>
+<div class="pure-u-1"><p></p></div>
+<div class="pure-u-1-5">
+    <button onclick="setColor(iLColor)">LED Color</button>
+</div>
+<div class="pure-u-1-5">
+    <input type="color" id="iLColor" value="#406080">
+</div>
+<div class="pure-u-1"><p></p></div>
+<div class="pure-u-1">
+    <button onclick="setColor(this)" value="#000000" style="background-color: #000000;">R</button>
+    <button onclick="setColor(this)" value="#FF0000" style="background-color: #FF0000;">R</button>
+    <button onclick="setColor(this)" value="#00FF00" style="background-color: #00FF00;">G</button>
+    <button onclick="setColor(this)" value="#0000FF" style="background-color: #0000FF;">B</button>
+</div>
+<div class="pure-u-1"><p></p></div>
+<div class="pure-u-1"><pre>{{bledCText}}</pre></div>
+
+
+<script>
+    function setColor(element) {
+        const color = element.value.toString();
+        const r = parseInt(color.substr(1,2),16);
+        const g = parseInt(color.substr(3,2),16);
+        const b = parseInt(color.substr(5,2),16);
+        const url = ['/command/{{bledId}}','SCOL', r,g,b].join('/');
+        fetch(url);
+    }
+
+    function setValue(command, elementId) {
+        const value = document.getElementById(elementId).value;
+        const url = ['/command/{{bledId}}',command,value].join('/');
+        fetch(url);
+    }
+
+    function sendCommand(...params) {
+        const url = '/command/{{bledId}}/'.concat(params.join('/'));
+//        console.log(url);
+        fetch(url);        
+    }
+
+    function startUpdate() {
+        fetch('/update/{{bledId}}').then(response => { })
+    }
+
+</script>
