@@ -44,6 +44,9 @@ udpServer.on('message', (buffer, rinfo) => {
     if (msg.indexOf('HELO') == 0) {
         blinkenLedList.update(rinfo.address);
     }
+    if (msg.indexOf('LOGD') == 0) {
+        log.info(`${rinfo.address} ${JSON.stringify(msg)}`);
+    }
 });
 
 udpServer.on('listening', () => {
@@ -51,11 +54,11 @@ udpServer.on('listening', () => {
     log.info(`udp server listening on ${address.address}:${address.port}`);
 });
 
-udpServer.sendCommand = async function (host, ...parameters) {
-    log.debug(`sending ${JSON.stringify(parameters)} to ${host}`);
+udpServer.sendCommand = function (host, ...parameters) {
+    log.info(`sending ${JSON.stringify(parameters)} to ${host}`);
     const msg = udpServer.buildBuffer(...parameters);
-    log.debug(`Message: [${msg}]`);
-    await udpServer.send(msg, udpServerConfig.port, host);
+    log.info(`Message: [${msg}]`);
+    udpServer.send(msg, udpServerConfig.port, host);
 };
 
 udpServer.bind(udpServerConfig.port, udpServerConfig.host, () => {
